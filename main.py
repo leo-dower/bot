@@ -1,65 +1,57 @@
+import os
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
-# Função para responder ao comando /start
+# Fetch the token from the environment variables
+token = os.getenv("TELEGRAM_TOKEN")
+
+# Function to respond to /start
 def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(
-        "🎉 Olá! Bem-vindo ao bot oficial da *Festa MC - 5 anos*! 🎈\n"
-        "Aqui estão os comandos disponíveis:\n"
-        "- /info: Detalhes sobre a festa\n"
-        "- /local: Endereço do evento\n"
-        "- /horario: Horário da festa\n"
-        "- /confirmar: Confirme sua presença."
+        "🎉 Welcome to the *Festa MC - 5 Years* bot! 🎈\n"
+        "Available commands:\n"
+        "- /info: Details about the party\n"
+        "- /local: Event address\n"
+        "- /horario: Party schedule\n"
+        "- /confirmar: Confirm your attendance."
     )
 
-# Função para fornecer detalhes sobre a festa
+# Function to provide event details
 def info(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(
-        "🎊 A festa será no dia *10/12*, às *18h*, com o tema: *Noite de Gala*.\n"
-        "Venha preparado(a) para uma noite inesquecível! 💃🕺"
-    )
+    update.message.reply_text("🎊 The party will be on *10/12*, at *6 PM*. Theme: *Night of Glamour*. 💃🕺")
 
-# Função para fornecer o endereço
+# Function to provide event location
 def local(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(
-        "📍 *Endereço do Evento:*\n"
-        "Salão de Festas XYZ\n"
-        "Rua das Flores, 123, Centro, Cidade."
-    )
+    update.message.reply_text("📍 *Address:* XYZ Party Hall, 123 Flowers Street, Downtown.")
 
-# Função para fornecer o horário
+# Function to provide party schedule
 def horario(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(
-        "⏰ *Horário da Festa:*\n"
-        "A festa começa às 18h e termina à meia-noite."
-    )
+    update.message.reply_text("⏰ *Schedule:* The party starts at 6 PM and ends at midnight.")
 
-# Função para confirmação de presença
+# Function to confirm attendance
 def confirmar(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(
-        "🎉 Obrigado por confirmar sua presença! Por favor, envie seu nome completo para registrar a confirmação. 😊"
-    )
+    update.message.reply_text("🎉 Thanks for confirming! Please send your full name to register. 😊")
 
-# Função para mensagens não reconhecidas
+# Function for unknown commands
 def unknown(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("❓ Desculpe, não entendi. Por favor, use um dos comandos disponíveis.")
+    update.message.reply_text("❓ Sorry, I didn't understand. Please use one of the available commands.")
 
 def main():
-    # Substituído pelo token do seu bot fornecido pelo BotFather
-    updater = Updater("7074333923:AAFpfxXmkyTvNJZxMS2ekvHOh275_X7M0gI")
+    # Create the Updater and pass the bot token
+    updater = Updater(token)
     dispatcher = updater.dispatcher
 
-    # Adicionando comandos
+    # Adding command handlers
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("info", info))
     dispatcher.add_handler(CommandHandler("local", local))
     dispatcher.add_handler(CommandHandler("horario", horario))
     dispatcher.add_handler(CommandHandler("confirmar", confirmar))
 
-    # Adicionando mensagens desconhecidas
+    # Adding handler for unknown commands
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, unknown))
 
-    # Inicia o bot
+    # Start the bot
     updater.start_polling()
     updater.idle()
 
